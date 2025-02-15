@@ -4,7 +4,7 @@ import {UsersComponent} from "@/components/users/UsersComponent";
 const UsersPage = () => {
     return (
         <div>
-            <UsersComponent/>
+            Users page content <UsersComponent/>
         </div>
     );
 };

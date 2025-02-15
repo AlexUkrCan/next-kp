@@ -11,13 +11,8 @@ export const Menu = () => {
                 <Link href="/auth">auth</Link>
             </li>
 
-            <li>
-                <Link href="/users">users</Link>
-            </li>
 
-            <li>
-                <Link href="/recipes">recipes</Link>
-            </li>
+
         </ul>
     );
 };
