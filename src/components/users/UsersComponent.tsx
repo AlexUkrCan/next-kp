@@ -3,6 +3,7 @@ import {getAllUsers} from "@/services/api.service";
 
 
 
+
 export const UsersComponent = async () => {
 
     const users = await getAllUsers();
@@ -10,9 +11,7 @@ export const UsersComponent = async () => {
 
     return (
         <div>
-            {
 
-            }
 
         </div>
     );

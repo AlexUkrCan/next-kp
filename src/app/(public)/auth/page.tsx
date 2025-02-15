@@ -1,9 +1,10 @@
 import React from 'react';
+import Form from "next/form";
 
 const AuthorizationPage = () => {
     return (
         <div>
-            <form action="/login">
+            <Form action="/login">
                 <label className={'block'}>
                     <input className={'border-2 border-black'}   type="text"   placeholder="username"/>
 
@@ -15,7 +16,7 @@ const AuthorizationPage = () => {
                 </label>
                 <br/>
                 <button className={'border-2 bg-green-300 '}  >Log in</button>
-            </form>
+            </Form>
 
         </div>
     );

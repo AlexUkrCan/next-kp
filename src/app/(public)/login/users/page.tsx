@@ -1,10 +1,16 @@
 import React from 'react';
-import {UsersComponent} from "@/components/users/UsersComponent";
+import {IUsers} from "@/models/users-model/IUsers";
 
-const UsersPage = () => {
+
+
+const UsersPage = async () => {
+
+   const users = await fetch('http://localhost:3000/login/users').then(res=>res.json())
+
     return (
         <div>
-            Users page content <UsersComponent/>
+            {users.map((user:IUsers)=>(<div key={user.id}>{user.username}</div>))}
+
         </div>
     );
 };
