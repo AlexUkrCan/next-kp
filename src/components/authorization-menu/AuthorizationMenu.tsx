@@ -6,7 +6,7 @@ export const Menu = () => {
 
 
             <li>
-                <Link href="/login/users">users</Link>
+                <Link href="auth/login/users">users</Link>
             </li>
 
             <li>

@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use((requestObject)=>{
 
 //створюємо метод login яка буде приймати обєкт LoginData та робимо для нього тип
 
-type LoginData = {
+export type LoginData = {
     username: string;
     password: string;
     expiresInMins: number;

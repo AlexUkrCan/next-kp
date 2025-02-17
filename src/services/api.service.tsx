@@ -6,7 +6,7 @@ import {IUsers} from "@/models/users-model/IUsers";
 
 
 export const getAllUsers = async ():Promise<IUsers[]> =>{
-    const usersAll = await fetch('https://dummyjson.com/users')
+    const usersAll = await fetch('https://dummyjson.com/auth/users')
         .then(value => value.json())
         .then(({users}:IUsersObjects)=>{
             return users;
