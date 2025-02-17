@@ -4,6 +4,7 @@ import React from "react";
 
 import { FC } from 'react';
 import {getAllUsers} from "@/services/api.service";
+import Link from "next/link";
 
 
 type UserPropsType={
@@ -20,7 +21,7 @@ export const UsersComponent:FC<UserPropsType> = async ({user}:UserPropsType) => 
         <div>
 
             {
-                users.map((user) => <div key={user.id}>{user.firstName}  {user.lastName}</div>)
+                users.map((user) => <div key={user.id}><Link href={'/login/users/'+user.id.toString()}>{user.firstName}  {user.lastName}</Link></div>)
             }
 
         </div>
