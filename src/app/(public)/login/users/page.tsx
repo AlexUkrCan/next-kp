@@ -1,18 +1,17 @@
+'use server'
 import React from 'react';
+import {UsersComponent} from "@/components/users/UsersComponent";
 import {IUsers} from "@/models/users-model/IUsers";
 
 
-
-const UsersPage = async () => {
-
-   const users = await fetch('http://localhost:3000/login/users').then(res=>res.json())
+const UsersPage = async ({users}:{users:IUsers[]}) => {
 
     return (
         <div>
-            {users.map((user:IUsers)=>(<div key={user.id}>{user.username}</div>))}
-
+            <UsersComponent user={users}/>
         </div>
     );
+
 };
 
 export default UsersPage;
