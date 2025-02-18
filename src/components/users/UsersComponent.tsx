@@ -21,7 +21,7 @@ export const UsersComponent:FC<UserPropsType> = async ({user}:UserPropsType) => 
         <div>
 
             {
-                users.map((user) => <div key={user.id}><Link href={'/login/users/'+user.id.toString()}>{user.firstName}  {user.lastName}</Link></div>)
+                users.map((user) => <div key={user.id}><Link href={'/auth/login/users/'+user.id.toString()}>{user.firstName}  {user.lastName}</Link></div>)
             }
 
         </div>

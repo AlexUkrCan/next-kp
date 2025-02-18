@@ -8,6 +8,8 @@ import {joiResolver} from "@hookform/resolvers/joi";
 import {useRouter} from "next/compat/router";
 
 
+
+
 const AuthorizationPage = () => {
 
     const {handleSubmit, register, formState:{ isValid},reset}  =
@@ -25,12 +27,7 @@ const AuthorizationPage = () => {
     }
 
 
-    const onButtonClickNavigate = ()  =>{
-        if(router){
-            router.push('/auth/login')
-        }
 
-    }
 
     const customHandler = (data:LoginData,
     ) => {
@@ -47,9 +44,21 @@ const AuthorizationPage = () => {
         reset();
     }
 
+
+    const onButtonClickNavigate = ()  =>{
+
+
+        if(router){
+
+                router.push('/auth/login');
+
+        }
+
+    }
+
     return (
         <div>
-            <form action="/login" onSubmit={handleSubmit(customHandler)}>
+            <form action={'/login'} onSubmit={handleSubmit(customHandler)}>
                 <label className={'block'}>
                     <input className={'border-2 border-black'}   type="text" {...register('username')}  placeholder="username"/>
 
@@ -64,7 +73,10 @@ const AuthorizationPage = () => {
             </form>
 
         </div>
+
     );
+
 };
+
 
 export default AuthorizationPage;

@@ -6,11 +6,11 @@ export const Menu = () => {
 
 
             <li>
-                <Link href="auth/login/users">users</Link>
+                <Link href="/auth/login/users">users</Link>
             </li>
 
             <li>
-                <Link href="/login/recipes">recipes</Link>
+                <Link href="/auth/login/recipes">recipes</Link>
             </li>
 
 

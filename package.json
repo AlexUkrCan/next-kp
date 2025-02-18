@@ -17,7 +17,8 @@
     "cookie": "^1.0.2",
     "react-hook-form": "^7.54.2",
     "joi": "^17.13.3",
-    "@hookform/resolvers": "^4.1.0"
+    "@hookform/resolvers": "^4.1.0",
+    "js-cookie": "^3.0.5"
   },
   "devDependencies": {
     "typescript": "^5",

@@ -1,7 +1,9 @@
+
 import axios from "axios";
 import {IUsersWithTokens} from "@/models/auth-model/IUsersWithTokens";
 import {ITokenPair} from "@/models/auth-model/ITokenPairs";
 import {retriveLocalStorage} from "@/app/helper/helpers";
+
 
 
 const axiosInstance =  axios.create({
@@ -35,8 +37,26 @@ export const login =async ({username, password, expiresInMins}:LoginData):Promis
     //запит поверне нам відповідь в середмні якої вже будуть наші токени
     console.log(userWithtoken);
     //зберігаємо нащ токен в localstorage
-    localStorage.setItem('user', JSON.stringify(userWithtoken));
+     localStorage.setItem('user', JSON.stringify(userWithtoken));
+
 }
+
+export const sendTokenToServer = async () => {
+    // Отримуємо токен з localStorage
+    const token = localStorage.getItem('user'); // Тут 'auth_token' - назва ключа, де зберігається токен
+
+    if (token) {
+        try {
+            // Відправляємо токен на сервер для збереження в cookies
+            await axios.post('http://localhost:3001/auth/save-token', { token });
+        } catch (error) {
+            console.error('Помилка при відправці токену на сервер:', error);
+        }
+    }
+};
+
+// Викликаємо функцію після аутентифікації
+
 
 // export const loadAuthProducts = async ():Promise<IProducts[]> => {
 //     const {data:{products}} = await axiosInstance.get<IBaseResponceModel>("/products");
