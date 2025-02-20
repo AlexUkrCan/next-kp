@@ -5,12 +5,22 @@ import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import userValidator from "@/app/validator/user-validator";
 import {getProtectedData, login, LoginData} from "@/services/api.auth-service";
+import {useRouter} from "next/navigation";
+import Cookies from "js-cookie";
 
 const AuthorizationPage = () => {
     const { handleSubmit, register, formState: { isValid }, reset } = useForm<LoginData>({
         mode: 'all', resolver: joiResolver(userValidator)
     });
     const [isClient, setIsClient] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!Cookies.get('token')) {
+            router.push('/auth/login'); // Якщо токен не знайдено, переходимо на сторінку логіну
+        }
+    }, [router]);
+
 
     useEffect(() => {
         setIsClient(true);
@@ -30,6 +40,7 @@ const AuthorizationPage = () => {
         };
 
         login(loginData);
+
 
         try {
             const response = await fetch('https://dummyjson.com/auth', {

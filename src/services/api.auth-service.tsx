@@ -4,6 +4,8 @@ import {IUsersWithTokens} from "@/models/auth-model/IUsersWithTokens";
 import {ITokenPair} from "@/models/auth-model/ITokenPairs";
 import {retriveLocalStorage} from "@/app/helper/helpers";
 import Cookie from 'js-cookie';
+import Cookies from 'js-cookie';
+import {router} from "next/client";
 
 
 
@@ -40,23 +42,32 @@ export const login =async ({username, password, expiresInMins}:LoginData):Promis
     console.log(userWithtoken);
     //зберігаємо нащ токен в localstorage
     //  localStorage.setItem('user', JSON.stringify(userWithtoken));
+    if (userWithtoken.accessToken) {
     Cookie.set('token', userWithtoken.accessToken, { expires: 1, secure: process.env.NODE_ENV === 'production' });
     Cookie.set('refreshToken', userWithtoken.refreshToken, { expires: 1, secure: process.env.NODE_ENV === 'production' });
-
+        console.log('Token set in cookie:', Cookies.get('token'));
+    } else {
+        console.log('No access token received!');
+    }
 }
 export const getProtectedData = async () => {
-    const token = Cookie.get('token'); // Отримуємо токен з cookie
+    const token = Cookie.get('token');// Отримуємо токен з cookie
+
     if (!token) {
         console.log('Token not found!');
+        router.push('/auth/login');
         return;
     }
+
 
     const response = await fetch('https://dummyjson.com/auth', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`, // Додаємо токен у заголовок
         },
+
     });
+
 
     const data = await response.json();
     console.log(data);
