@@ -3,6 +3,8 @@ import axios from "axios";
 import {IUsersWithTokens} from "@/models/auth-model/IUsersWithTokens";
 import {ITokenPair} from "@/models/auth-model/ITokenPairs";
 import {retriveLocalStorage} from "@/app/helper/helpers";
+import Cookie from 'js-cookie';
+
 
 
 
@@ -37,23 +39,30 @@ export const login =async ({username, password, expiresInMins}:LoginData):Promis
     //запит поверне нам відповідь в середмні якої вже будуть наші токени
     console.log(userWithtoken);
     //зберігаємо нащ токен в localstorage
-     localStorage.setItem('user', JSON.stringify(userWithtoken));
+    //  localStorage.setItem('user', JSON.stringify(userWithtoken));
+    Cookie.set('token', userWithtoken.accessToken, { expires: 1, secure: process.env.NODE_ENV === 'production' });
+    Cookie.set('refreshToken', userWithtoken.refreshToken, { expires: 1, secure: process.env.NODE_ENV === 'production' });
 
 }
-
-export const sendTokenToServer = async () => {
-    // Отримуємо токен з localStorage
-    const token = localStorage.getItem('user'); // Тут 'auth_token' - назва ключа, де зберігається токен
-
-    if (token) {
-        try {
-            // Відправляємо токен на сервер для збереження в cookies
-            await axios.post('http://localhost:3001/auth/save-token', { token });
-        } catch (error) {
-            console.error('Помилка при відправці токену на сервер:', error);
-        }
+export const getProtectedData = async () => {
+    const token = Cookie.get('token'); // Отримуємо токен з cookie
+    if (!token) {
+        console.log('Token not found!');
+        return;
     }
+
+    const response = await fetch('https://dummyjson.com/auth', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`, // Додаємо токен у заголовок
+        },
+    });
+
+    const data = await response.json();
+    console.log(data);
 };
+
+
 
 // Викликаємо функцію після аутентифікації
 
