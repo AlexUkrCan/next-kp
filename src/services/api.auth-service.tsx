@@ -5,8 +5,6 @@ import {ITokenPair} from "@/models/auth-model/ITokenPairs";
 import {retriveLocalStorage} from "@/app/helper/helpers";
 import Cookie from 'js-cookie';
 import Cookies from 'js-cookie';
-import {router} from "next/client";
-
 
 
 
@@ -18,14 +16,14 @@ const axiosInstance =  axios.create({
 
 
 //будемо перехоплювати всі запити які будуть get
-axiosInstance.interceptors.request.use((requestObject)=>{
-    //беремо метод який використовує requestObject та переводимо його у великі літери так як зазвичай ці методи прописані великими літерами
-    if(requestObject.method?.toUpperCase() === "GET"){
-        //в розділ з хедерами додаєм хедер Authorization
-        requestObject.headers.Authorization = 'Bearer ' + retriveLocalStorage<IUsersWithTokens>('user').accessToken;
-    }
-    return requestObject
-})
+// axiosInstance.interceptors.request.use((requestObject)=>{
+//     //беремо метод який використовує requestObject та переводимо його у великі літери так як зазвичай ці методи прописані великими літерами
+//     if(requestObject.method?.toUpperCase() === "GET"){
+//         //в розділ з хедерами додаєм хедер Authorization
+//         requestObject.headers.Authorization = 'Bearer ' + retriveLocalStorage<IUsersWithTokens>('user').accessToken;
+//     }
+//     return requestObject
+// })
 
 
 //створюємо метод login яка буде приймати обєкт LoginData та робимо для нього тип
@@ -50,28 +48,52 @@ export const login =async ({username, password, expiresInMins}:LoginData):Promis
         console.log('No access token received!');
     }
 }
-export const getProtectedData = async () => {
-    const token = Cookie.get('token');// Отримуємо токен з cookie
+
+// export default function handler(req:NextApiRequest, res:NextApiResponse) {
+//     const authToken = (req.headers.authorization || '').split("Bearer ").at(2)
+//
+//     if (authToken && authToken === process.env.accessToken) {
+//         res.status(200).json({ hello: 'world' })
+//     }
+//     res.status(401).json({ error: "Invalid Auth Token" });
+// }
+
+export const getTokenFromCookie = () => {
+    const token = Cookie.get('token');  // Отримуємо токен з cookie
 
     if (!token) {
-        console.log('Token not found!');
-        router.push('/auth/login');
-        return;
+        console.log('Token is not found in cookie');
+        return null;
     }
 
+    console.log('Token from cookie:', token);  // Виводимо токен
+    return token;  // Повертаємо токен
+};
 
-    const response = await fetch('https://dummyjson.com/auth', {
+const token = getTokenFromCookie();
+console.log(token);
+
+
+export const getProtectedData = async () => {
+    const token = await Cookie.get('token');// Отримуємо токен з cookie
+
+
+
+    const response =  fetch('https://dummyjson.com/auth', {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${token}`, // Додаємо токен у заголовок
+             Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',// Додаємо токен у заголовок
         },
 
     });
 
 
-    const data = await response.json();
-    console.log(data);
+
+    // const data = await response.json();
+    // console.log(data);
 };
+
 
 
 

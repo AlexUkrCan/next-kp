@@ -4,9 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import userValidator from "@/app/validator/user-validator";
-import {getProtectedData, login, LoginData} from "@/services/api.auth-service";
+import {getProtectedData, getTokenFromCookie, login, LoginData} from "@/services/api.auth-service";
 import {useRouter} from "next/navigation";
 import Cookies from "js-cookie";
+import Cookie from "js-cookie";
+
 
 const AuthorizationPage = () => {
     const { handleSubmit, register, formState: { isValid }, reset } = useForm<LoginData>({
@@ -14,10 +16,13 @@ const AuthorizationPage = () => {
     });
     const [isClient, setIsClient] = useState(false);
     const router = useRouter();
+    const token = Cookie.get('token');
 
     useEffect(() => {
-        if (!Cookies.get('token')) {
-            router.push('/auth/login'); // Якщо токен не знайдено, переходимо на сторінку логіну
+        if (Cookies.get('token')) {
+            router.push('/auth/login');
+        }else{
+            router.push('/auth');
         }
     }, [router]);
 
@@ -39,24 +44,28 @@ const AuthorizationPage = () => {
             expiresInMins:1,
         };
 
-        login(loginData);
+        await login(loginData);
+
+        await getProtectedData();
+        await getTokenFromCookie();
 
 
         try {
             const response = await fetch('https://dummyjson.com/auth', {
                 method: 'POST',
                 headers: {
+                    Authorization: `Bearer ${getTokenFromCookie()}`,
                     'Content-Type': 'application/json',
+
                 },
                 body: JSON.stringify(data),
             });
 
+
             if (response.ok) {
+                router.push('/auth/login');
 
 
-                getProtectedData();
-
-                window.location.href = '/auth/login';
             } else {
                 const result = await response.json();
                 console.log(result.message || 'Невірні дані');
