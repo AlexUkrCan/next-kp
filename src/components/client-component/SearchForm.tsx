@@ -7,6 +7,7 @@ const SearchForm = ({ defaultQuery }: { defaultQuery: string }) => {
     const [query, setQuery] = useState(defaultQuery);
     const router = useRouter();
 
+
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value);
     };

@@ -15,6 +15,7 @@ import SearchForm from "@/components/client-component/SearchForm";
 const UsersPage = async ( { searchQuery }: { searchQuery: string }) => {
 
 
+
     const users = await fetchUsers(searchQuery);
 
     return (
